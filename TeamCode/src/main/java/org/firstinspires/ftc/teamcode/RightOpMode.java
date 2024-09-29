@@ -27,7 +27,7 @@ public class RightOpMode extends OpMode {
         if (this.startSeconds == 0.0d) {
             this.startSeconds = this.runtime.seconds();
         }
-        final double time = 10.0d;
+        final double time = 5.0d;
         final double power = 0.3d;
         if (this.runtime.seconds() < this.startSeconds + time) {
             this.leftDriveFront.setPower(power);
