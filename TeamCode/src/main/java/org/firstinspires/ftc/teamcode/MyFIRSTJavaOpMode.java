@@ -76,10 +76,10 @@ public class MyFIRSTJavaOpMode extends OpMode {
         boolean wristDown = this.gamepad2.dpad_down;
         double armVal = (double) this.gamepad2.left_stick_y;
         double rotateShld2 = rotateShld;
-        if (openHand > 0.0d) {
+        if (openHand > 0.1d) {
             this.hand.setPower(1.0d);
         }
-        if (closeHand > 0.0d) {
+        if (closeHand > 0.1d) {
             this.handpos = 0.0d;
             this.hand.setPower(-1.0d);
         }
