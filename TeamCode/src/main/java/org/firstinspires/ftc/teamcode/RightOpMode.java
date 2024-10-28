@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(group = "Iterative OpMode", name = "Autonomous: Red")
+@TeleOp(group = "Iterative OpMode", name = "Autonomous: Park")
 public class RightOpMode extends OpMode {
     private DcMotor leftDriveBack = null;
     private DcMotor leftDriveFront = null;
@@ -17,10 +17,10 @@ public class RightOpMode extends OpMode {
     double startSeconds = 0.0d;
 
     public void init() {
-        this.leftDriveFront = (DcMotor) this.hardwareMap.get(DcMotor.class, "frontleftmotor");
-        this.leftDriveBack = (DcMotor) this.hardwareMap.get(DcMotor.class, "backleftmotor");
-        this.rightDriveFront = (DcMotor) this.hardwareMap.get(DcMotor.class, "frontrightmotor");
-        this.rightDriveBack = (DcMotor) this.hardwareMap.get(DcMotor.class, "backrightmotor");
+        this.leftDriveFront = (DcMotor) this.hardwareMap.get(DcMotor.class, "FLMotor");
+        this.leftDriveBack = (DcMotor) this.hardwareMap.get(DcMotor.class, "BLMotor");
+        this.rightDriveFront = (DcMotor) this.hardwareMap.get(DcMotor.class, "FRMotor");
+        this.rightDriveBack = (DcMotor) this.hardwareMap.get(DcMotor.class, "BRMotor");
     }
 
     public void loop() {
@@ -30,10 +30,10 @@ public class RightOpMode extends OpMode {
         final double time = 5.0d;
         final double power = 0.3d;
         if (this.runtime.seconds() < this.startSeconds + time) {
-            this.leftDriveFront.setPower(power);
+            this.leftDriveFront.setPower(-power);
             this.leftDriveBack.setPower(-power);
             this.rightDriveFront.setPower(power);
-            this.rightDriveBack.setPower(-power);
+            this.rightDriveBack.setPower(power);
             return;
         }
         this.leftDriveFront.setPower(0.0d);
