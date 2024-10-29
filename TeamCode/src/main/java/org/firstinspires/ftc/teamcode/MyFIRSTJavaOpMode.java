@@ -66,9 +66,9 @@ public class MyFIRSTJavaOpMode extends OpMode {
     }
 
     public void loop() {
-        double strafe = (double) this.gamepad1.left_stick_y;
-        double drive = (double) this.gamepad1.left_stick_x;
-        double turn = (double) this.gamepad1.right_stick_x;
+        double strafe = (double) this.gamepad1.right_stick_x;
+        double drive = (double) this.gamepad1.left_stick_y;
+        double turn = (double) this.gamepad1.left_stick_x;
         double rotateShld = (double) this.gamepad2.right_stick_y;
         double openHand = (double) this.gamepad2.left_trigger;
         double closeHand = (double) this.gamepad2.right_trigger;
@@ -115,10 +115,10 @@ public class MyFIRSTJavaOpMode extends OpMode {
         double rightDrivePower = Range.clip(drive + turn, -4.0d, 4.0d);
         double strafePower = Range.clip(strafe, -4.0d, 4.0d);
         double shoulderPower = Range.clip(rotateShld2, -1.0d, 1.0d);
-        this.leftDriveFront.setPower(leftDrivePower - strafePower);
-        this.leftDriveBack.setPower(leftDrivePower + strafePower);
+        this.leftDriveFront.setPower(leftDrivePower);
+        this.leftDriveBack.setPower(-leftDrivePower);
         this.rightDriveFront.setPower(rightDrivePower - strafePower);
-        this.rightDriveBack.setPower(rightDrivePower + strafePower);
+        this.rightDriveBack.setPower(-rightDrivePower - strafePower);
         this.shoulder.setPower(shoulderPower);
         double d4 = strafe;
         this.telemetry.addData("Status", (Object) "Run Time: " + this.runtime.toString());
