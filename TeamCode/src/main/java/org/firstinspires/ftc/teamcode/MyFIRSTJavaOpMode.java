@@ -110,15 +110,16 @@ public class MyFIRSTJavaOpMode extends OpMode {
         } else {
             this.arm.setPower(0.0d);
         }
-        
-        double leftDrivePower = Range.clip(drive - turn, -4.0d, 4.0d);
-        double rightDrivePower = Range.clip(drive + turn, -4.0d, 4.0d);
-        double strafePower = Range.clip(strafe, -4.0d, 4.0d);
+
+        // To change max scale (speed of motor), change the final two values of the next 3 lines.
+        double leftDrivePower = Range.scale(drive - turn, -1.0d, 1.0d, -0.5d,0.5d);
+        double rightDrivePower = Range.scale(drive + turn, -1.0d, 1.0d, -0.5d,0.5d);
+        double strafePower = Range.scale(strafe, -1.0d, 1.0d, -0.5d,0.5d);
         double shoulderPower = Range.clip(rotateShld2, -1.0d, 1.0d);
-        this.leftDriveFront.setPower(leftDrivePower);
-        this.leftDriveBack.setPower(-leftDrivePower);
-        this.rightDriveFront.setPower(rightDrivePower - strafePower);
-        this.rightDriveBack.setPower(-rightDrivePower - strafePower);
+        this.leftDriveFront.setPower(-leftDrivePower + strafePower);
+        this.leftDriveBack.setPower(leftDrivePower + strafePower);
+        this.rightDriveFront.setPower(-rightDrivePower - strafePower);
+        this.rightDriveBack.setPower(rightDrivePower - strafePower);
         this.shoulder.setPower(shoulderPower);
         double d4 = strafe;
         this.telemetry.addData("Status", (Object) "Run Time: " + this.runtime.toString());
