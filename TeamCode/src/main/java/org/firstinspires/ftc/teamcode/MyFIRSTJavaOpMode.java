@@ -51,6 +51,9 @@ public class MyFIRSTJavaOpMode extends OpMode {
         this.shoulder.setDirection(DcMotorSimple.Direction.REVERSE);
         this.handpos = 0.0d;
         this.wristpos = 0.0d;
+
+        this.shoulder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.shoulder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         double currentPosition = (double) this.shoulder.getCurrentPosition();
         this.shldsetpoint = currentPosition;
         this.shldIntegral = currentPosition;
@@ -105,29 +108,53 @@ public class MyFIRSTJavaOpMode extends OpMode {
             turn = 0.0d;
         }
 
-        if(Math.abs(armVal) > 0.1) {
-            this.arm.setPower(armVal);
-        } else {
-            this.arm.setPower(0.0d);
-        }
+
 
         // To change max scale (speed of motor), change the final two values of the next 3 lines.
         double leftDrivePower = Range.scale(drive - turn, -1.0d, 1.0d, -0.5d,0.5d);
         double rightDrivePower = Range.scale(drive + turn, -1.0d, 1.0d, -0.5d,0.5d);
         double strafePower = Range.scale(strafe, -1.0d, 1.0d, -0.5d,0.5d);
+        int shoulderPos=0;
         double shoulderPower = Range.clip(rotateShld2, -1.0d, 1.0d);
         this.leftDriveFront.setPower(-leftDrivePower + strafePower);
         this.leftDriveBack.setPower(leftDrivePower + strafePower);
         this.rightDriveFront.setPower(-rightDrivePower - strafePower);
         this.rightDriveBack.setPower(rightDrivePower - strafePower);
+        shoulderPos= this.shoulder.getCurrentPosition();
+        int armPos = this.arm.getCurrentPosition();
+
+        if(shoulderPos < 1500) {
+            if(armPos > 100) {
+                arm.setPower(-1.0d);
+                shoulderPower = 0;
+            } else {
+                armVal = 0;
+            }
+        }
+        if(armPos >= 9000) {
+            armVal = Math.max(0, armVal);
+        }
+        if(armPos <= 0) {
+            armVal = Math.min(0, armVal);
+        }
+        if(Math.abs(armVal) > 0.1) {
+            this.arm.setPower(-armVal);
+        } else {
+            this.arm.setPower(0.0d);
+        }
+
         this.shoulder.setPower(shoulderPower);
         double d4 = strafe;
         this.telemetry.addData("Status", (Object) "Run Time: " + this.runtime.toString());
         double d5 = drive;
         this.telemetry.addData("Drive Motors", "left (%.2f), right (%.2f)", Double.valueOf(leftDrivePower), Double.valueOf(rightDrivePower));
-        this.telemetry.addData("Arm Motor", "shoulder (%.2f)", Double.valueOf((double) this.shoulder.getCurrentPosition()));
+
+        this.telemetry.addData("Shoulder Position", "shoulder (%.2f)", Double.valueOf(shoulderPos));
+        this.telemetry.addData("Arm Position", "arm (%.2f)", Double.valueOf(armPos));
+
     }
 
     public void stop() {
+
     }
 }
