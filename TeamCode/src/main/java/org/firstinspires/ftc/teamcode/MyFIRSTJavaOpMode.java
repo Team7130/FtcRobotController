@@ -45,8 +45,14 @@ public class MyFIRSTJavaOpMode extends OpMode {
         servo3.setDirection(Servo.Direction.FORWARD);
 
         this.leftDriveFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.leftDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.leftDriveFront.getCurrentPosition();
+        this.leftDriveFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.leftDriveBack.setDirection(DcMotorSimple.Direction.FORWARD);
         this.rightDriveFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.rightDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.rightDriveFront.getCurrentPosition();
+        this.rightDriveFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.rightDriveBack.setDirection(DcMotorSimple.Direction.FORWARD);
         this.shoulder.setDirection(DcMotorSimple.Direction.REVERSE);
         this.handpos = 0.0d;
@@ -81,8 +87,7 @@ public class MyFIRSTJavaOpMode extends OpMode {
         double rotateShld2 = rotateShld;
         if (openHand > 0.1d) {
             this.hand.setPower(1.0d);
-        }
-        if (closeHand > 0.1d) {
+        } else if (closeHand > 0.1d) {
             this.handpos = 0.0d;
             this.hand.setPower(-1.0d);
         }
@@ -120,23 +125,31 @@ public class MyFIRSTJavaOpMode extends OpMode {
         this.leftDriveBack.setPower(leftDrivePower + strafePower);
         this.rightDriveFront.setPower(-rightDrivePower - strafePower);
         this.rightDriveBack.setPower(rightDrivePower - strafePower);
+        int leftFrontPos=0;
+        int rightFrontPos=0;
+        leftFrontPos= this.leftDriveFront.getCurrentPosition();
+        rightFrontPos= this.rightDriveFront.getCurrentPosition();
         shoulderPos= this.shoulder.getCurrentPosition();
         int armPos = this.arm.getCurrentPosition();
 
-        if(shoulderPos < 1500) {
-            if(armPos > 100) {
-                arm.setPower(-1.0d);
-                shoulderPower = 0;
-            } else {
-                armVal = 0;
-            }
-        }
+
         if(armPos >= 9000) {
             armVal = Math.max(0, armVal);
         }
         if(armPos <= 0) {
             armVal = Math.min(0, armVal);
         }
+
+        // Prevents arm from extending when shoulder is past a certain position.
+        if(shoulderPos < 1500) {
+            if(armPos > 100) {
+                armVal = 1.0d;
+                shoulderPower = 0;
+            } else {
+                armVal = 0;
+            }
+        }
+
         if(Math.abs(armVal) > 0.1) {
             this.arm.setPower(-armVal);
         } else {
@@ -151,6 +164,7 @@ public class MyFIRSTJavaOpMode extends OpMode {
 
         this.telemetry.addData("Shoulder Position", "shoulder (%.2f)", Double.valueOf(shoulderPos));
         this.telemetry.addData("Arm Position", "arm (%.2f)", Double.valueOf(armPos));
+        this.telemetry.addData("Wheel Position", "FLeft (%.2f), FRight (%.2f)", Double.valueOf(leftFrontPos), Double.valueOf(rightFrontPos));
 
     }
 
