@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(group = "Iterative OpMode", name = "Autonomous: Basket")
-public class AutoBasket extends OpMode {
+@TeleOp(group = "Iterative OpMode", name = "Autonomous: Basket and Park")
+public class AutoBasketPark extends OpMode {
     private CRServo hand = null;
     private Servo wrist = null;
     double handpos = 0.0d;
@@ -97,14 +97,24 @@ public class AutoBasket extends OpMode {
                     shoulder.setPower(1);
                 } else {
                     shoulder.setPower(0);
+                    hand.setPower(0);
+                    int backwardDistance = -2250;
+                    if (leftDriveFront.getCurrentPosition() < -backwardDistance && rightDriveFront.getCurrentPosition() > backwardDistance) {
+                        leftDriveFront.setPower(-0.5d);
+                        rightDriveFront.setPower(-0.5d);
+                        leftDriveBack.setPower(0.5d);
+                        rightDriveBack.setPower(0.5d);
+                    } else {
+                        leftDriveFront.setPower(0);
+                        rightDriveFront.setPower(0);
+                        leftDriveBack.setPower(0);
+                        rightDriveBack.setPower(0);
+                    }
                 }
             }
-
-
             this.telemetry.addData("Shoulder Position", "shoulder (%.2f)", Double.valueOf(shoulder.getCurrentPosition()));
             this.telemetry.addData("Arm Position", "arm (%.2f)", Double.valueOf(arm.getCurrentPosition()));
             this.telemetry.addData("Wheel Position", "FLeft (%.2f), FRight (%.2f)", Double.valueOf(leftDriveFront.getCurrentPosition()), Double.valueOf(rightDriveFront.getCurrentPosition()));
-
         }
 
     }
