@@ -133,10 +133,10 @@ public class MyFIRSTJavaOpMode extends OpMode {
         int armPos = this.arm.getCurrentPosition();
 
 
-        if(armPos >= 9000) {
+        if(armPos >= 8900) {
             armVal = Math.max(0, armVal);
         }
-        if(armPos <= 0) {
+        if(armPos <= 15) {
             armVal = Math.min(0, armVal);
         }
 

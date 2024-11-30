@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 
-import com.qualcomm.hardware.lynx.LynxServoController;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(group = "Iterative OpMode", name = "Autonomous: Basket and Park")
-public class AutoBasketPark extends OpMode {
+@TeleOp(group = "Iterative OpMode", name = "Autonomous: Basket Park")
+public class AutoBasketPark extends LinearOpMode {
     private CRServo hand = null;
     private Servo wrist = null;
     double handpos = 0.0d;
@@ -28,7 +27,7 @@ public class AutoBasketPark extends OpMode {
     private double shldsetpoint = -50.0d;
     private DcMotor shoulder = null;
 
-    public void init() {
+    public void initialize() {
         this.telemetry.addData("Status", (Object) "Initialized");
         this.leftDriveFront = (DcMotor) this.hardwareMap.get(DcMotor.class, "FLMotor");
         this.leftDriveBack = (DcMotor) this.hardwareMap.get(DcMotor.class, "BLMotor");
@@ -59,63 +58,53 @@ public class AutoBasketPark extends OpMode {
         this.telemetry.addData("Status", (Object) "Initialized: " + this.runtime.toString());
     }
 
-    public void loop() {
-        if (10 > runtime.time()) {
-            this.wrist.setPosition(0.6d);
+    public void runOpMode() {
 
-            if (shoulder.getCurrentPosition() < 3250) {
-                shoulder.setPower(-1);
-            } else {
-                shoulder.setPower(0);
-                int forwardDistance = 1000;
-                if (leftDriveFront.getCurrentPosition() > -forwardDistance && rightDriveFront.getCurrentPosition() < forwardDistance) {
-                    leftDriveFront.setPower(0.5d);
-                    rightDriveFront.setPower(0.5d);
-                    leftDriveBack.setPower(-0.5d);
-                    rightDriveBack.setPower(-0.5d);
-                } else {
-                    leftDriveFront.setPower(0);
-                    rightDriveFront.setPower(0);
-                    leftDriveBack.setPower(0);
-                    rightDriveBack.setPower(0);
-                    if (arm.getCurrentPosition() < 4000) {
-                        arm.setPower(1.0d);
-                    } else {
-                        arm.setPower(0);
-                        hand.setPower(1.0d);
-                    }
-                }
-            }
-
-        } else {
-
-            if (arm.getCurrentPosition() > 0) {
-                arm.setPower(-1.0d);
-            } else {
-                arm.setPower(0);
-                if (shoulder.getCurrentPosition() > 0) {
-                    shoulder.setPower(1);
-                } else {
-                    shoulder.setPower(0);
-                    hand.setPower(0);
-                    int backwardDistance = -2250;
-                    if (leftDriveFront.getCurrentPosition() < -backwardDistance && rightDriveFront.getCurrentPosition() > backwardDistance) {
-                        leftDriveFront.setPower(-0.5d);
-                        rightDriveFront.setPower(-0.5d);
-                        leftDriveBack.setPower(0.5d);
-                        rightDriveBack.setPower(0.5d);
-                    } else {
-                        leftDriveFront.setPower(0);
-                        rightDriveFront.setPower(0);
-                        leftDriveBack.setPower(0);
-                        rightDriveBack.setPower(0);
-                    }
-                }
-            }
-            this.telemetry.addData("Shoulder Position", "shoulder (%.2f)", Double.valueOf(shoulder.getCurrentPosition()));
-            this.telemetry.addData("Arm Position", "arm (%.2f)", Double.valueOf(arm.getCurrentPosition()));
-            this.telemetry.addData("Wheel Position", "FLeft (%.2f), FRight (%.2f)", Double.valueOf(leftDriveFront.getCurrentPosition()), Double.valueOf(rightDriveFront.getCurrentPosition()));
+        initialize();
+        waitForStart();
+        this.wrist.setPosition(0.6d);
+        while(shoulder.getCurrentPosition() < 3250) {
+            shoulder.setPower(-1);
         }
+        shoulder.setPower(0);
+        int forwardDistance = 1000;
+        while(leftDriveFront.getCurrentPosition() > -forwardDistance && rightDriveFront.getCurrentPosition() < forwardDistance) {
+            leftDriveFront.setPower(0.5d);
+            rightDriveFront.setPower(0.5d);
+            leftDriveBack.setPower(-0.5d);
+            rightDriveBack.setPower(-0.5d);
+        }
+        leftDriveFront.setPower(0);
+        rightDriveFront.setPower(0);
+        leftDriveBack.setPower(0);
+        rightDriveBack.setPower(0);
+        while(arm.getCurrentPosition() < 4000) {
+            arm.setPower(1.0d);
+        }
+        arm.setPower(0);
+        hand.setPower(1.0d);
+        runtime.reset();
+        while(runtime.seconds() < 3) {
 
+        }
+        while (arm.getCurrentPosition() > 15) {
+            arm.setPower(-1.0d);
+        }
+        arm.setPower(0);
+        while(shoulder.getCurrentPosition() > 0) {
+            shoulder.setPower(1);
+        }
+        shoulder.setPower(0);
+        int backwardDistance = -2250;
+        while(leftDriveFront.getCurrentPosition() < -backwardDistance && rightDriveFront.getCurrentPosition() > backwardDistance) {
+            leftDriveFront.setPower(-0.5d);
+            rightDriveFront.setPower(-0.5d);
+            leftDriveBack.setPower(0.5d);
+            rightDriveBack.setPower(0.5d);
+        }
+        leftDriveFront.setPower(0);
+        rightDriveFront.setPower(0);
+        leftDriveBack.setPower(0);
+        rightDriveBack.setPower(0);
     }
 }
