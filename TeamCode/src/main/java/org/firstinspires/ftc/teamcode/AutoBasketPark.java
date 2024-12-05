@@ -43,8 +43,14 @@ public class AutoBasketPark extends LinearOpMode {
         servo3.setDirection(Servo.Direction.FORWARD);
 
         this.leftDriveFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.leftDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.leftDriveFront.getCurrentPosition();
+        this.leftDriveFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.leftDriveBack.setDirection(DcMotorSimple.Direction.FORWARD);
         this.rightDriveFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.rightDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.rightDriveFront.getCurrentPosition();
+        this.rightDriveFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.rightDriveBack.setDirection(DcMotorSimple.Direction.FORWARD);
         this.shoulder.setDirection(DcMotorSimple.Direction.REVERSE);
         this.handpos = 0.0d;

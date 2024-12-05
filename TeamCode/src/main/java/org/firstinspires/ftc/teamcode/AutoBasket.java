@@ -45,12 +45,20 @@ public class AutoBasket extends LinearOpMode {
         servo3.setDirection(Servo.Direction.FORWARD);
 
         this.leftDriveFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.leftDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.leftDriveFront.getCurrentPosition();
+        this.leftDriveFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.leftDriveBack.setDirection(DcMotorSimple.Direction.FORWARD);
         this.rightDriveFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.rightDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.rightDriveFront.getCurrentPosition();
+        this.rightDriveFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.rightDriveBack.setDirection(DcMotorSimple.Direction.FORWARD);
         this.shoulder.setDirection(DcMotorSimple.Direction.REVERSE);
         this.handpos = 0.0d;
         this.wristpos = 0.0d;
+
+
 
         this.shoulder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.shoulder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -58,6 +66,7 @@ public class AutoBasket extends LinearOpMode {
         this.shldsetpoint = currentPosition;
         this.shldIntegral = currentPosition;
         this.telemetry.addData("Status", (Object) "Initialized: " + this.runtime.toString());
+
     }
 
     public void runOpMode() {
@@ -65,12 +74,12 @@ public class AutoBasket extends LinearOpMode {
         initialize();
         waitForStart();
         this.wrist.setPosition(0.6d);
-        while(shoulder.getCurrentPosition() < 3250) {
+        while (shoulder.getCurrentPosition() < 3250) {
             shoulder.setPower(-1);
         }
         shoulder.setPower(0);
         int forwardDistance = 1000;
-        while(leftDriveFront.getCurrentPosition() > -forwardDistance && rightDriveFront.getCurrentPosition() < forwardDistance) {
+        while (leftDriveFront.getCurrentPosition() > -forwardDistance && rightDriveFront.getCurrentPosition() < forwardDistance) {
             leftDriveFront.setPower(0.5d);
             rightDriveFront.setPower(0.5d);
             leftDriveBack.setPower(-0.5d);
@@ -80,20 +89,20 @@ public class AutoBasket extends LinearOpMode {
         rightDriveFront.setPower(0);
         leftDriveBack.setPower(0);
         rightDriveBack.setPower(0);
-        while(arm.getCurrentPosition() < 4000) {
+        while (arm.getCurrentPosition() < 4000) {
             arm.setPower(1.0d);
         }
         arm.setPower(0);
         hand.setPower(1.0d);
         runtime.reset();
-        while(runtime.seconds() < 3) {
+        while (runtime.seconds() < 3) {
 
         }
         while (arm.getCurrentPosition() > 15) {
             arm.setPower(-1.0d);
         }
         arm.setPower(0);
-        while(shoulder.getCurrentPosition() > 0) {
+        while (shoulder.getCurrentPosition() > 0) {
             shoulder.setPower(1);
         }
         shoulder.setPower(0);
